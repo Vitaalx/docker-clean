@@ -26,6 +26,20 @@ services:
             - ./.env
         networks:
             - app-network
+    
+    # Node service
+    node:
+        build:
+            context: ./app-node
+            target: dev
+        volumes:
+            - .:/src
+        command: npm start
+        ports:
+            - "3000:3000"
+        environment:
+            NODE_ENV: development
+            DEBUG: nodejs-docker-express:*
 
     # Nginx service
     nginx:
