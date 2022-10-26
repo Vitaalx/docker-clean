@@ -1,6 +1,6 @@
 # Docker clean with php & mysql & nodejs
 
-Frontdesk Checks est un application en cours de développement
+Docker-clean est un application pour commencer un nouveau projet
 
 ## Installation
 
