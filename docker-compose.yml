@@ -3,7 +3,7 @@ services:
 
     # Wordpress service
     wordpress:
-        image: wordpress:php8.0-fpm
+        image: wordpress:latest
         container_name: wordpress
         restart: always
         ports:
