@@ -1,15 +1,23 @@
 version: "3.7"
 services:
 
-    # PHP service
-    app:
-        build: .
-        container_name: php-app
-        working_dir: /var/www/
+    # Wordpress service
+    wordpress:
+        image: wordpress:php8.0-fpm
+        container_name: wordpress
+        restart: always
+        ports:
+            - "8080:8080"
         volumes:
-            - ./:/var/www
+            - ./wordpress/html:/var/www/html
+        environment:
+            WORDPRESS_DB_HOST: db
+            WORDPRESS_DB_USER: ${DB_USERNAME}
+            WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+            WORDPRESS_DB_NAME: ${DB_DATABASE}
         networks:
             - app-network
+        command: php -S 0.0.0.0:8080 -t /var/www/html
 
     # MySQL database service
     db:
@@ -24,18 +32,6 @@ services:
             MYSQL_PASSWORD: ${DB_PASSWORD}
         env_file:
             - ./.env
-        networks:
-            - app-network
-
-    # Nginx service
-    nginx:
-        image: nginx:alpine
-        container_name: php-nginx
-        ports:
-            - 8000:80
-        volumes:
-            - ./:/var/www
-            - ./nginx/conf.d/:/etc/nginx/conf.d/
         networks:
             - app-network
 

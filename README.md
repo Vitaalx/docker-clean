@@ -1,4 +1,4 @@
-# Docker clean with php & mysql
+# Docker clean with Wordpress & mysql
 
 Docker-clean est un application pour commencer un nouveau projet
 
@@ -19,4 +19,5 @@ docker-compose up -d
 ```
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)
