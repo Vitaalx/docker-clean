@@ -3,18 +3,25 @@ services:
 
     # PHP service
     app:
-        build: .
-        container_name: php-app
+        build: ./app
+        container_name: app
         working_dir: /var/www/
+        restart: unless-stopped
+        environment:
+            SERVICE_NAME: app-symfony
+            SERVICE_TAGS: dev
         volumes:
-            - ./:/var/www
+            - ./app:/var/www
+            - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
         networks:
             - app-network
+        depends_on:
+            - db
 
-    # MySQL database service
+    # MariaDB database service
     db:
-        image: mysql:5.7
-        container_name: mysql-db
+        image: mariadb:10.5.8
+        container_name: mariadb-symfony-app
         ports:
             - "3306:3306"
         environment:
@@ -24,6 +31,9 @@ services:
             MYSQL_PASSWORD: ${DB_PASSWORD}
         env_file:
             - ./.env
+        volumes:
+            -  ./db:/var/lib/mysql/
+            - ./mariadb/my.cnf:/etc/mysql/my.cnf
         networks:
             - app-network
 
@@ -32,7 +42,7 @@ services:
         image: nginx:alpine
         container_name: php-nginx
         ports:
-            - 8000:80
+            - "8000:80"
         volumes:
             - ./:/var/www
             - ./nginx/conf.d/:/etc/nginx/conf.d/
